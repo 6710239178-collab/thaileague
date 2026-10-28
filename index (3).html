@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXTGEN FC - THAI LEAGUE CAREER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #090d16;
+  --bg-card: #121824;
+  --bg-card-border: #202b3d;
+  --accent-gold: #f1b70e;
+  --accent-blue: #2196f3;
+  --accent-red: #e91e63;
+  --accent-green: #00e676;
+  --text-main: #ffffff;
+  --text-muted: #90a4ae;
+  --font-main: 'Kanit', sans-serif;
+  --font-title: 'Prompt', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: var(--font-main); }
+body { background: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
+
+@keyframes pulseRed { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+@keyframes flashGoldAnim { 0% { background: var(--bg-card); } 50% { background: rgba(241, 183, 14, 0.25); border-color: var(--accent-gold); } 100% { background: var(--bg-card); } }
+@keyframes flashRedAnim { 0% { background: var(--bg-card); } 50% { background: rgba(233, 30, 99, 0.25); border-color: var(--accent-red); } 100% { background: var(--bg-card); } }
+
+.flash-gold { animation: flashGoldAnim 0.8s ease-out; }
+.flash-red { animation: flashRedAnim 0.8s ease-out; }
+
+.app-container { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
+
+.sidebar { width: 260px; background: #05080e; border-right: 1px solid var(--bg-card-border); display: flex; flex-direction: column; padding: 24px 16px; flex-shrink: 0; }
+.brand-title { font-family: var(--font-title); font-size: 22px; font-weight: 700; color: #fff; text-align: center; margin-bottom: 20px; letter-spacing: 0.5px; }
+.brand-title span { color: var(--accent-gold); }
+
+.nav-menu { display: flex; flex-direction: column; gap: 8px; flex: 1; overflow-y: auto; }
+.nav-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: 8px; color: var(--text-muted); font-size: 14px; font-weight: 500; cursor: pointer; transition: 0.2s; border-left: 3px solid transparent; background: rgba(255,255,255,0.02); position: relative; }
+.nav-item:hover { background: var(--bg-card); color: #fff; }
+.nav-item.active { background: linear-gradient(90deg, rgba(241, 183, 14, 0.15), transparent); color: var(--accent-gold); border-left-color: var(--accent-gold); font-weight: 600; }
+.badge-notify { background: var(--accent-red); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; }
+
+.main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: #0b101c; }
+.top-bar { height: 75px; background: var(--bg-card); border-bottom: 1px solid var(--bg-card-border); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; flex-shrink: 0; }
+.ovr-box { background: linear-gradient(135deg, #f1b70e, #b88600); color: #000; font-family: var(--font-title); font-size: 28px; font-weight: 700; width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+
+.view-container { flex: 1; padding: 24px; overflow-y: auto; padding-bottom: 50px; }
+.view-panel { display: none; }
+.view-panel.active { display: block; }
+
+.btn-gold { width: 100%; background: linear-gradient(180deg, #f1b70e, #c79505); color: #000; border: none; padding: 12px 18px; border-radius: 8px; font-family: var(--font-title); font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+.btn-gold:hover:not(:disabled) { background: #ffd147; transform: translateY(-1px); }
+.btn-gold:disabled { background: #1a2332; color: #4e5a70; cursor: not-allowed; border: 1px solid #2a364f; }
+
+.btn-blue { width: 100%; background: linear-gradient(180deg, #2196f3, #1565c0); color: #fff; border: none; padding: 12px 18px; border-radius: 8px; font-family: var(--font-title); font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+.btn-blue:hover:not(:disabled) { background: #42a5f5; }
+.btn-blue:disabled { background: #1a2332; color: #4e5a70; cursor: not-allowed; border: 1px solid #2a364f; }
+
+.btn-red { width: 100%; background: linear-gradient(180deg, #e91e63, #ad1457); color: #fff; border: none; padding: 12px 18px; border-radius: 8px; font-family: var(--font-title); font-size: 15px; font-weight: 600; cursor: pointer; }
+
+.card { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 12px; padding: 20px; margin-bottom: 20px; transition: background 0.3s, border-color 0.3s; }
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--bg-card-border); }
+.card-title { font-family: var(--font-title); font-size: 17px; color: #fff; font-weight: 600; }
+
+.creator-grid { display: grid; grid-template-columns: 300px 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
+.player-card-preview { background: var(--bg-card); border: 2px solid var(--accent-gold); border-radius: 14px; padding: 24px 18px; text-align: center; }
+.form-input, .form-select { width: 100%; background: #070a12; border: 1px solid var(--bg-card-border); padding: 10px 12px; border-radius: 6px; color: #fff; font-size: 14px; outline: none; }
+.stat-adjuster { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; background: #070a12; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--bg-card-border); }
+.btn-step { width: 26px; height: 26px; background: var(--bg-card-border); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+
+.live-scoreboard { background: #070a12; border: 1px solid var(--bg-card-border); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 20px; }
+.live-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--accent-red); font-weight: 600; background: rgba(233, 30, 99, 0.1); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(233, 30, 99, 0.3); margin-bottom: 12px; }
+.live-dot { width: 7px; height: 7px; background: var(--accent-red); border-radius: 50%; animation: pulseRed 1s infinite; }
+
+.team-badge-circle { width: 46px; height: 46px; border-radius: 50%; background: #162032; border: 2px solid var(--accent-gold); display: flex; align-items: center; justify-content: center; font-family: var(--font-title); font-weight: 700; font-size: 14px; color: #fff; margin: 0 auto 6px; }
+.score-display { font-family: var(--font-title); font-size: 42px; font-weight: 700; color: var(--accent-gold); letter-spacing: 2px; }
+.match-minute { font-family: var(--font-title); font-size: 18px; color: #fff; font-weight: 600; }
+
+.match-progress-bg { width: 100%; height: 6px; background: #121927; border-radius: 3px; overflow: hidden; border: 1px solid var(--bg-card-border); margin-top: 12px; }
+.match-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent-gold), var(--accent-green)); transition: width 0.5s linear; }
+
+.match-log-box { height: 230px; overflow-y: auto; background: #05080e; border: 1px solid var(--bg-card-border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; text-align: left; }
+.log-item { padding: 8px 12px; border-radius: 6px; background: rgba(255,255,255,0.02); border-left: 3px solid var(--bg-card-border); line-height: 1.4; }
+.log-item.highlight { border-left-color: var(--accent-gold); background: rgba(241, 183, 14, 0.08); font-weight: 500; color: #fff; }
+.log-item.alert { border-left-color: var(--accent-red); background: rgba(233, 30, 99, 0.08); color: #fff; }
+.log-item.sub { border-left-color: var(--accent-blue); background: rgba(33, 150, 243, 0.08); font-weight: 600; color: #64b5f6; }
+
+.decision-box { background: #090e18; border: 1px solid var(--accent-gold); border-radius: 10px; padding: 16px; margin-top: 15px; }
+.choice-btn { width: 100%; background: #121927; border: 1px solid var(--bg-card-border); padding: 12px 16px; border-radius: 6px; color: #fff; text-align: left; margin-bottom: 8px; cursor: pointer; transition: 0.2s; font-size: 14px; }
+.choice-btn:hover { background: var(--bg-card-border); border-color: var(--accent-gold); }
+
+.rating-modal { background: #070a12; border: 2px solid var(--accent-gold); border-radius: 12px; padding: 20px; text-align: center; margin-top: 15px; }
+.rating-num { font-family: var(--font-title); font-size: 54px; font-weight: 700; color: var(--accent-gold); }
+
+.league-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.league-table th { text-align: left; padding: 8px 10px; color: var(--text-muted); border-bottom: 1px solid var(--bg-card-border); }
+.league-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.league-table tr.my-team { background: rgba(241, 183, 14, 0.08); color: var(--accent-gold); font-weight: 600; }
+
+.chat-box { height: 220px; overflow-y: auto; background: #05080e; border: 1px solid var(--bg-card-border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.chat-msg { font-size: 13px; padding: 10px 14px; border-radius: 8px; background: #121824; border: 1px solid var(--bg-card-border); width: 90%; }
+.chat-msg.agent { border-left: 3px solid var(--accent-gold); align-self: flex-start; }
+
+.store-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-top: 12px; }
+.store-item { background: #070a12; border: 1px solid var(--bg-card-border); border-radius: 8px; padding: 14px; text-align: center; }
+.store-item.owned { border-color: var(--accent-green); }
+
+.trophy-container-empty { background: #070a12; border: 1px dashed var(--bg-card-border); border-radius: 10px; padding: 40px; text-align: center; color: var(--text-muted); font-size: 16px; }
+.trophy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+.trophy-card { background: rgba(241, 183, 14, 0.05); border: 1px solid var(--accent-gold); border-radius: 10px; padding: 20px; text-align: center; }
+
+.transfer-status-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 12px; }
+.transfer-open { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
+.transfer-closed { background: rgba(233, 30, 99, 0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
+
+.fixed-footer-cr {
+  position: fixed;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: #64748b;
+  letter-spacing: 0.5px;
+  z-index: 9999;
+  pointer-events: none;
+  text-transform: uppercase;
+  background: rgba(9, 13, 22, 0.8);
+  padding: 4px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.fixed-footer-cr span { color: var(--accent-gold); font-weight: 600; }
+
+.hidden { display: none !important; }
+
+/* ===== MOBILE-GAME SKIN (Play Store style) ===== */
+:root{--bg-dark:#1c8a3f;--bg-card:#1a3a82;--bg-card-border:#3466d6;--accent-gold:#ffd23f;--accent-blue:#4cc3ff;--accent-red:#ff4d6d;--accent-green:#5df07a;--text-muted:#c4d6ff;}
+body{background:repeating-linear-gradient(90deg,#2aa24e 0 70px,#32b058 70px 140px);}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at 50% 30%,transparent 40%,rgba(0,40,10,.45));pointer-events:none;z-index:0}
+.app-container{flex-direction:column;position:relative;z-index:1}
+.main-content{order:1;background:transparent;min-height:0}
+.sidebar{order:2;width:100%;flex-direction:row;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));background:linear-gradient(#1b2f6e,#102250);border-right:0;border-top:4px solid var(--accent-gold);box-shadow:0 -4px 14px rgba(0,0,0,.35)}
+.brand-title{display:none}
+.nav-menu{flex-direction:row;gap:4px;overflow-x:auto;overflow-y:hidden;justify-content:space-around}
+.nav-item{flex:1;min-width:58px;flex-direction:column;justify-content:center;gap:2px;padding:6px 2px;border-radius:14px;border-left:0;background:transparent;text-align:center;font-size:11px;line-height:1.1;color:#b9cdfa}
+.nav-item .ni{font-size:24px;line-height:1;transition:transform .15s}
+.nav-item.active{background:linear-gradient(#ffe27a,#ffb800);color:#5a3200;box-shadow:0 3px 0 #b87400}
+.nav-item.active .ni{transform:translateY(-3px) scale(1.2)}
+.badge-notify{position:absolute;top:0;right:6px}
+.top-bar{height:auto;padding:10px 14px;background:linear-gradient(#2f7bff,#1747b8);border-bottom:4px solid var(--accent-gold);box-shadow:0 4px 0 rgba(0,0,0,.25);gap:10px;flex-wrap:wrap}
+.top-bar>div:last-child{gap:10px!important;flex-wrap:wrap}
+.ovr-box{border-radius:50% 50% 50% 50%/40% 40% 60% 60%;background:linear-gradient(#ffe27a,#ff9f1a);border:3px solid #fff;box-shadow:0 3px 0 #a85d00;color:#5a2d00;width:54px;height:58px}
+.view-container{padding:14px 14px 20px}
+.card{background:linear-gradient(#244ca8,#1a3a82);border:3px solid var(--accent-gold);border-radius:20px;box-shadow:0 6px 0 #0c1f55,0 10px 18px rgba(0,0,0,.3)}
+.card-header{border-bottom:2px dashed rgba(255,255,255,.25)}
+.card-title{font-weight:700;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.btn-gold,.btn-blue,.btn-red{border-radius:16px;font-weight:700;font-size:16px;padding:13px 18px;border:0;border-bottom:6px solid;text-shadow:0 1px 0 rgba(255,255,255,.35);transition:transform .08s,border-bottom-width .08s}
+.btn-gold{background:linear-gradient(#ffe45e,#ffae00);color:#5a2d00;border-color:#b86e00}
+.btn-blue{background:linear-gradient(#6fd3ff,#1e8cf0);color:#fff;border-color:#0f5bb0;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.btn-red{background:linear-gradient(#ff7b94,#e8294f);border-color:#a3112f;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+.btn-gold:hover:not(:disabled),.btn-blue:hover:not(:disabled){transform:none;filter:brightness(1.08)}
+.btn-gold:active:not(:disabled),.btn-blue:active:not(:disabled),.btn-red:active{transform:translateY(4px);border-bottom-width:2px}
+.btn-gold:disabled,.btn-blue:disabled{background:linear-gradient(#9aa7c7,#7a88aa);color:#e6ebf7;border:0;border-bottom:6px solid #566287;text-shadow:none}
+.btn-step{width:34px;height:34px;border-radius:50%;background:linear-gradient(#6fd3ff,#1e8cf0);border-bottom:3px solid #0f5bb0;font-size:18px}
+.choice-btn{background:linear-gradient(#fff,#dbe8ff);color:#17306b;font-weight:600;border:0;border-bottom:5px solid #8aa7e6;border-radius:14px;padding:14px 16px}
+.choice-btn:hover{background:linear-gradient(#fff6c9,#ffe27a);border-color:#d99a00}
+.choice-btn:active{transform:translateY(3px);border-bottom-width:2px}
+.form-input,.form-select{background:#fff;color:#17306b;border:3px solid #8aa7e6;border-radius:12px;font-weight:600;padding:11px 12px}
+[style*="#070a12"],[style*="#090e18"]{background:rgba(10,25,70,.55)!important;border-radius:14px}
+.match-log-box,.chat-box{background:rgba(8,20,60,.6);border:2px solid #3466d6;border-radius:14px}
+.log-item,.chat-msg{background:rgba(255,255,255,.1)}
+.live-scoreboard{background:linear-gradient(#10286a,#0a1a4a);border:3px solid var(--accent-gold);border-radius:20px}
+.score-display{text-shadow:0 3px 0 #a15c00;font-size:48px}
+.team-badge-circle{background:linear-gradient(#fff,#cfe0ff);color:#17306b;border:3px solid var(--accent-gold);width:52px;height:52px}
+.match-progress-bg{height:12px;border-radius:8px;background:rgba(0,0,0,.35)}
+.match-progress-fill{border-radius:8px}
+.decision-box{background:rgba(10,25,70,.9);border:3px solid var(--accent-gold);border-radius:18px}
+.rating-modal{background:linear-gradient(#244ca8,#1a3a82);border:3px solid var(--accent-gold);border-radius:20px}
+.rating-num{text-shadow:0 3px 0 #a15c00}
+.player-card-preview{background:linear-gradient(160deg,#ffe27a,#f0a500 45%,#c77b00);border:4px solid #fff;border-radius:22px;box-shadow:0 6px 0 #8a5200;color:#4a2600}
+.player-card-preview *{color:#4a2600!important}
+.player-card-preview div[style*="rgba(255,255,255,0.03)"]{background:rgba(255,255,255,.35)!important}
+.stat-adjuster{background:rgba(10,25,70,.55);border-radius:12px;border:0}
+.store-item,.trophy-card{background:rgba(10,25,70,.55);border:3px solid #3466d6;border-radius:16px}
+.store-item.owned{border-color:var(--accent-green)}
+.trophy-card{border-color:var(--accent-gold)}
+.league-table th{color:var(--accent-gold)}
+.league-table tr.my-team{background:rgba(255,210,63,.22)}
+.transfer-status-badge{border-radius:20px;font-weight:700}
+#creatorScreen{position:relative;z-index:1;overflow-y:auto;height:100vh}
+#creatorScreen h1{color:#fff!important;font-size:34px!important;text-shadow:0 4px 0 #0c1f55,0 0 18px rgba(0,0,0,.4);-webkit-text-stroke:1px #0c1f55;letter-spacing:.5px}
+#creatorScreen>p{color:#fff!important;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.fixed-footer-cr{bottom:76px;background:rgba(10,25,70,.7);color:#c4d6ff}
+@media(max-width:700px){.creator-grid{grid-template-columns:1fr}.fixed-footer-cr{display:none}.nav-item{min-width:50px;font-size:10px}.score-display{font-size:38px}}
+</style>
+</head>
+<body>
+
+<!-- CREATOR SCREEN -->
+<div id="creatorScreen" style="padding: 40px 20px;">
+  <h1 style="font-family:var(--font-title); font-size:32px; text-align:center; color:var(--accent-gold); margin-bottom:4px;">สร้างนักเตะเยาวชนของคุณ</h1>
+  <p style="text-align:center; color:var(--text-muted); font-size:14px; margin-bottom:30px;">เริ่มต้นการเดินทางในสโมสรอคาเดมี่เพื่อไต่เต้าสู่ไทยลีก 1</p>
+
+  <div class="creator-grid">
+    <div class="player-card-preview">
+      <div style="font-family:var(--font-title); font-size:16px; color:var(--text-muted);" id="prevPos">ST</div>
+      <div style="font-family:var(--font-title); font-size:56px; color:var(--accent-gold); font-weight:700;" id="prevOvr">50</div>
+      <div style="font-size:20px; font-weight:600; color:#fff;" id="prevName">สมชาย ใจเด็ด</div>
+      <div style="font-size:13px; color:var(--accent-blue); margin-bottom:6px;" id="prevAge">อายุ: 16 ปี</div>
+      <div style="font-size:13px; color:var(--text-muted); margin-bottom:20px;" id="prevClub">สุ่มสโมสรอคาเดมี่เมื่อเริ่มเกม</div>
+
+      <div style="display:flex; flex-direction:column; gap:6px; font-size:13px;">
+        <div style="display:flex; justify-content:space-between; padding:6px 10px; background:rgba(255,255,255,0.03); border-radius:4px;"><span>ความเร็ว (Pace)</span><b id="pvPace">50</b></div>
+        <div style="display:flex; justify-content:space-between; padding:6px 10px; background:rgba(255,255,255,0.03); border-radius:4px;"><span>การยิง (Shooting)</span><b id="pvShooting">50</b></div>
+        <div style="display:flex; justify-content:space-between; padding:6px 10px; background:rgba(255,255,255,0.03); border-radius:4px;"><span>การจ่าย (Passing)</span><b id="pvPassing">50</b></div>
+        <div style="display:flex; justify-content:space-between; padding:6px 10px; background:rgba(255,255,255,0.03); border-radius:4px;"><span>เกมรับ (Defending)</span><b id="pvDefending">50</b></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0;">
+      <h3 style="margin-bottom:16px; font-family:var(--font-title);">ข้อมูลส่วนตัว</h3>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">ชื่อ-นามสกุล</label>
+        <input type="text" id="inName" class="form-input" value="สมชาย ใจเด็ด" oninput="updatePreview()">
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:14px;">
+        <div>
+          <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">ตำแหน่ง</label>
+          <select id="inPos" class="form-select" onchange="updatePreview()">
+            <option value="ST">ST - กองหน้า</option>
+            <option value="LW">LW - ปีกซ้าย</option>
+            <option value="RW">RW - ปีกขวา</option>
+            <option value="CAM">CAM - กองกลางรุก</option>
+            <option value="CM">CM - กองกลาง</option>
+            <option value="CB">CB - กองหลัง</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">อายุเริ่มต้น</label>
+          <select id="inAge" class="form-select" onchange="updatePreview()">
+            <option value="16">16 ปี</option>
+            <option value="17">17 ปี</option>
+            <option value="18">18 ปี</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="padding:14px; background:#070a12; border-radius:8px; border:1px solid var(--bg-card-border); margin-top:16px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px; align-items:center;">
+          <span style="font-size:13px; color:#fff; font-weight:500;">⚡ อัปเกรดค่าพลังเริ่มต้น</span>
+          <span style="font-size:13px;">แต้มคงเหลือ: <b id="initPoints" style="color:var(--accent-red)">15</b></span>
+        </div>
+        <div id="statAdjusters"></div>
+      </div>
+
+      <button class="btn-gold" id="btnStartCareer" style="margin-top:20px;" disabled onclick="initCareer()">
+        🔒 กรุณาใช้อัปแต้มทักษะให้หมดก่อนเริ่มเกม
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div id="gameDashboard" class="app-container hidden">
+  <div class="sidebar">
+    <div class="brand-title">THAI LEAGUE <span>CAREER</span></div>
+    <div class="nav-menu">
+      <div class="nav-item active" onclick="switchTab('home', this)"><span class="ni">🏠</span><span>หน้าหลัก</span></div>
+      <div class="nav-item hidden" id="navAgent" onclick="switchTab('agent', this)">
+        <span class="ni">💼</span><span>เอเย่นต์</span>
+        <span id="agentNotify" class="badge-notify hidden">!</span>
+      </div>
+      <div class="nav-item" onclick="switchTab('attrs', this)"><span class="ni">🏋️</span><span>ศูนย์ฝึกซ้อม</span></div>
+      <div class="nav-item" onclick="switchTab('match', this)"><span class="ni">⚽</span><span>การแข่งขัน</span></div>
+      <div class="nav-item" onclick="switchTab('lifestyle', this)"><span class="ni">🏎️</span><span>ไลฟ์สไตล์</span></div>
+      <div class="nav-item" onclick="switchTab('trophies', this)"><span class="ni">🏆</span><span>ถ้วยรางวัล</span></div>
+      <div class="nav-item" onclick="switchTab('table', this)"><span class="ni">📊</span><span>ตารางคะแนน</span></div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="top-bar">
+      <div style="display:flex; align-items:center; gap:16px;">
+        <div class="ovr-box" id="hudOvr">50</div>
+        <div>
+          <div style="font-size:17px; font-weight:600;" id="hudName">NAME</div>
+          <div style="font-size:12px; color:var(--text-muted);" id="hudSub">ST · อคาเดมี่</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:20px;">
+        <div style="text-align:right;"><div style="font-size:11px; color:var(--text-muted);">อายุ</div><div style="font-size:13px; font-weight:600;" id="hudAge">16 ปี</div></div>
+        <div style="text-align:right;"><div style="font-size:11px; color:var(--text-muted);">สถานะทีม</div><div style="font-size:13px; font-weight:600; color:var(--accent-gold);" id="hudRole">สำรองอคาเดมี่</div></div>
+        <div style="text-align:right;"><div style="font-size:11px; color:var(--text-muted);">ฤดูกาล/สัปดาห์</div><div style="font-size:13px; font-weight:600;" id="hudWeek">ปี 1 (1/30)</div></div>
+        <div style="text-align:right;"><div style="font-size:11px; color:var(--text-muted);">ความฟิต</div><div style="font-size:13px; font-weight:600;" id="hudFitness">100%</div></div>
+      </div>
+    </div>
+
+    <div class="view-container">
+      <!-- HOME TAB -->
+      <div id="tab-home" class="view-panel active">
+        <div class="card hidden" id="emergencyRestCard" style="border-color: var(--accent-red);">
+          <div class="card-header"><div class="card-title" style="color:var(--accent-red);">🚨 แจ้งเตือน: นักเตะหมดแรงเต็มที (ความฟิต 0%)</div></div>
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">คุณไม่สามารถลงซ้อมหรือลงแข่งได้แล้ว กรุณากดพักผ่อนฉุกเฉินเพื่อฟื้นฟูร่างกาย</p>
+          <button class="btn-red" onclick="emergencyRest()">🛌 พักผ่อนฉุกเฉิน (+40% ความฟิต)</button>
+        </div>
+
+        <div class="card" style="border-color: var(--accent-gold);">
+          <div class="card-header"><div class="card-title">💼 บริการเอเย่นต์ส่วนตัว (Agent)</div></div>
+          
+          <div id="agentHireSection">
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;" id="agentHireDesc">คุณยังไม่มีเอเย่นต์ประจำตัว! จ้างเอเย่นต์เพื่อเปิดใช้งานเมนูเอเย่นต์และรับข่าวสารโอกาสย้ายทีมในไทยลีก</p>
+            <button class="btn-gold" id="btnHireAgent" style="max-width:320px;" onclick="hireAgent('ต้อม ธีระศักดิ์', false)">🤝 จ้างเอเย่นต์มืออาชีพ (ค่าบริการ 5%)</button>
+          </div>
+
+          <div id="agentActiveSection" class="hidden">
+            <div style="font-size:13px; color:var(--accent-gold); font-weight:600; margin-bottom:8px;">
+              💬 เอเย่นต์ประจำตัว: <span id="agentActiveName">ต้อม ธีระศักดิ์</span>
+            </div>
+            <p style="font-size:13px; color:var(--text-muted);">คุณมีเอเย่นต์คอยดูแลผลประโยชน์แล้ว สามารถตรวจสอบกล่องข้อความย้ายทีมได้ที่เมนู <b>"💼 เอเย่นต์"</b> ทางด้านซ้ายมือ</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">📌 สถิติผลงานฤดูกาลนี้</div></div>
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;">
+            <div style="background:#070a12; padding:14px; border-radius:8px; text-align:center;"><div style="font-family:var(--font-title); font-size:22px; color:var(--accent-gold);" id="stApps">0</div><div style="font-size:12px; color:var(--text-muted);">ลงสนาม (นัด)</div></div>
+            <div style="background:#070a12; padding:14px; border-radius:8px; text-align:center;"><div style="font-family:var(--font-title); font-size:22px; color:var(--accent-gold);" id="stGoals">0</div><div style="font-size:12px; color:var(--text-muted);">ประตู (ลูก)</div></div>
+            <div style="background:#070a12; padding:14px; border-radius:8px; text-align:center;"><div style="font-family:var(--font-title); font-size:22px; color:var(--accent-gold);" id="stAssists">0</div><div style="font-size:12px; color:var(--text-muted);">แอสซิสต์</div></div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">💼 สถานะการเงิน & ค่าตัว</div></div>
+            <div style="font-size:13px; line-height:1.9;">
+              <div>มูลค่าการย้ายทีม: <b style="color:var(--accent-green);" id="infoVal">฿150,000</b></div>
+              <div>ค่าเหนื่อยต่อสัปดาห์: <b style="color:var(--accent-gold);" id="infoWage">฿2,000</b></div>
+              <div>ยอดเงินสะสมในบัญชี: <b style="color:#fff;" id="infoBank">฿0</b></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title">📋 สถานะความไว้ใจของโค้ช</div></div>
+            <p style="font-size:13px; color:var(--text-muted); margin-bottom:10px;">พัฒนาจาก อคาเดมี่ (เยาวชน) ➔ ดันขึ้นชุดใหญ่ (ไทยลีก 1)</p>
+            <div style="background:#070a12; padding:12px; border-radius:6px; border:1px solid var(--bg-card-border); display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:13px;">คะแนนความไว้ใจ:</span>
+              <b style="color:var(--accent-gold); font-size:16px;" id="coachTrustText">15 / 100</b>
+            </div>
+            <button class="btn-red hidden" id="btnRetire" style="margin-top:12px;" onclick="retireCareer()">🛑 ประกาศรีไทร์เลิกเล่นอาชีพ</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENT TAB -->
+      <div id="tab-agent" class="view-panel">
+        <div class="card">
+          <div class="card-header"><div class="card-title">💼 กล่องข้อความและการเจรจา (Agent Chat)</div></div>
+          
+          <div id="transferWindowBadge" class="transfer-status-badge transfer-closed">
+            🔒 ตลาดซื้อขายปิดอยู่ (เปิดเฉพาะสัปดาห์ 1-6 และ 15-18)
+          </div>
+
+          <div id="agentTabContent">
+            <div class="chat-box" id="agentChatBox"></div>
+            <div id="transferOfferBox" class="hidden" style="background:#070a12; border:1px solid var(--accent-gold); padding:16px; border-radius:8px; margin-top:12px;">
+              <div style="font-size:14px; font-weight:600; color:var(--accent-gold); margin-bottom:6px;">📩 ข้อเสนอซื้อตัวเข้ามา!</div>
+              <p style="font-size:13px; color:#fff; margin-bottom:12px;" id="transferOfferDesc">สโมสร... สนใจยื่นซื้อตัวคุณ</p>
+              <div style="display:flex; gap:10px;">
+                <button class="btn-gold" onclick="acceptTransfer()">✅ ตอบรับข้อเสนอย้ายทีม</button>
+                <button class="btn-red" onclick="rejectTransfer()">❌ ปฏิเสธข้อเสนอ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRAINING TAB -->
+      <div id="tab-attrs" class="view-panel">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🏋️ ศูนย์ฝึกซ้อมประจำสโมสร</div></div>
+          
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:20px;">
+            <div style="padding:16px; background:#070a12; border-radius:8px; border:1px solid var(--bg-card-border);">
+              <div style="font-weight:600; color:#fff; margin-bottom:4px;">💪 ฝึกซ้อมประจำสัปดาห์</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">พัฒนาค่าพลังและสร้างความประทับใจให้โค้ช (-20% ความฟิต)</div>
+              <button class="btn-gold" id="btnDoTrain" onclick="doWeeklyTraining()">เข้าซ้อมสัปดาห์นี้</button>
+            </div>
+
+            <div style="padding:16px; background:#070a12; border-radius:8px; border:1px solid var(--bg-card-border);">
+              <div style="font-weight:600; color:#fff; margin-bottom:4px;">🛌 พักผ่อนฟื้นฟูร่างกาย</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">พักผ่อนฟื้นฟูความฟิต (+30% ความฟิต) *หากเลือกพักถือว่าไม่ได้ซ้อม</div>
+              <button class="btn-blue" id="btnDoRest" onclick="restPlayer()">พักผ่อนสโมสร</button>
+            </div>
+          </div>
+
+          <h4 style="margin-bottom:12px; font-size:14px; color:var(--text-muted);">ค่าพลังปัจจุบันของคุณ</h4>
+          <div id="attributesListGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"></div>
+        </div>
+      </div>
+
+      <!-- LIFESTYLE TAB -->
+      <div id="tab-lifestyle" class="view-panel">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🏎️ ร้านค้าไลฟ์สไตล์ & สิ่งอำนวยความสะดวก</div></div>
+          <div class="store-grid" id="lifestyleStoreGrid"></div>
+        </div>
+      </div>
+
+      <!-- TROPHIES TAB -->
+      <div id="tab-trophies" class="view-panel">
+        <div class="card">
+          <div class="card-header"><div class="card-title">🏆 ถ้วยรางวัลและเกียรติยศ (Trophy Cabinet)</div></div>
+          <div id="trophyContainer"></div>
+        </div>
+      </div>
+
+      <!-- MATCH TAB -->
+      <div id="tab-match" class="view-panel">
+        <div class="card" id="matchLiveCard">
+          <div id="matchPreNotice" style="text-align:center; padding:30px 20px;">
+            <div style="font-size:22px; font-weight:700; color:var(--accent-gold); margin-bottom:8px;" id="matchVsTitle">สัปดาห์นี้พบกับ บีจี ปทุม ยูไนเต็ด U18</div>
+            <div style="font-size:14px; color:var(--text-muted); margin-bottom:20px;" id="matchCupTypeText">รายการ: ไทย Youth League (U18)</div>
+            <div style="color:var(--accent-red); font-size:13px; margin-bottom:20px;" id="matchNoticeMsg">🔒 คุณต้องเลือกซ้อมหรือพักผ่อนประจำสัปดาห์ก่อนจึงจะเริ่มแข่งได้!</div>
+            <button class="btn-gold" id="btnStartLiveMatch" disabled onclick="startLiveMatch()" style="max-width:320px; margin:0 auto; padding:14px;">
+              ⚽ คิกออฟเริ่มการแข่งขัน
+            </button>
+          </div>
+
+          <div id="liveStreamArea" class="hidden">
+            <div class="live-scoreboard">
+              <div class="live-badge"><div class="live-dot"></div><span id="liveStatusText">กำลังแข่งขัน LIVE</span></div>
+              
+              <div style="display:flex; align-items:center; justify-content:space-around; margin-bottom:12px;">
+                <div>
+                  <div class="team-badge-circle" id="homeBadge">MY</div>
+                  <div style="font-size:13px; font-weight:600; color:#fff;" id="homeName">ทีมเรา</div>
+                </div>
+                
+                <div>
+                  <div class="score-display" id="scoreText">0 - 0</div>
+                  <div class="match-minute" id="minuteText">0'</div>
+                </div>
+
+                <div>
+                  <div class="team-badge-circle" id="awayBadge" style="border-color:var(--accent-blue);">OPP</div>
+                  <div style="font-size:13px; font-weight:600; color:#fff;" id="awayName">คู่แข่ง</div>
+                </div>
+              </div>
+
+              <div class="match-progress-bg"><div class="match-progress-fill" id="matchProgressBar"></div></div>
+            </div>
+
+            <h4 style="margin-bottom:8px; font-size:13px; color:var(--text-muted);">เหตุการณ์สดในสนาม (LIVE LOGS)</h4>
+            <div class="match-log-box" id="matchLogBox"></div>
+
+            <div class="decision-box hidden" id="decisionBox">
+              <div style="font-size:13px; color:var(--accent-gold); font-weight:600; margin-bottom:4px;" id="decTitle">⚡ เหตุการณ์ตัดสินใจ!</div>
+              <div style="font-size:14px; color:#fff; margin-bottom:12px;" id="decDesc">คุณได้บอลในสนาม!</div>
+              <div id="decChoices"></div>
+            </div>
+
+            <div class="rating-modal hidden" id="ratingSummaryBox">
+              <div style="font-size:13px; color:var(--text-muted);">คะแนนประเมินผลงาน (MATCH RATING)</div>
+              <div class="rating-num" id="resRating">0.0</div>
+              <div style="font-size:14px; color:#fff; margin-bottom:12px;" id="resSummaryText">ลงสนาม 0 นาที</div>
+              <button class="btn-gold" style="max-width:240px; margin:0 auto;" onclick="finishMatchDay()">รับค่าเหนื่อย & ผ่านสัปดาห์</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TABLE TAB -->
+      <div id="tab-table" class="view-panel">
+        <div class="card">
+          <div class="card-header"><div class="card-title" id="tableTitleText">📊 ตารางคะแนน ไทย Youth League (U18)</div></div>
+          <table class="league-table">
+            <thead><tr><th>อันดับ</th><th>สโมสร</th><th>แข่ง</th><th>ชนะ</th><th>เสมอ</th><th>แพ้</th><th>แต้ม</th></tr></thead>
+            <tbody id="leagueTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="fixed-footer-cr">
+  DEVELOPED BY <span>EARTH SIRAWICH</span>
+</div>
+
+<script>
+/* ================= GAME STATE & CONFIG ================= */
+let P = null;
+const INIT_STATS = { pace: 50, shooting: 50, passing: 50, defending: 50 };
+let remainingInitPoints = 15;
+let tempStats = { ...INIT_STATS };
+
+let currentSeason = 1;
+let currentWeek = 1;
+let hasTrainedThisWeek = false;
+let hasRestedThisWeek = false;
+
+let matchTimer = null;
+let currentMinute = 0;
+let homeScore = 0;
+let awayScore = 0;
+let isPlayerOnField = false;
+let isPlayerWarmingUp = false;
+let currentOpponent = null;
+let isCupMatch = false;
+let cupRoundText = "";
+
+let matchGoals = 0;
+let matchAssists = 0;
+let matchRating = 6.0;
+let matchMinutesPlayed = 0;
+
+const STAT_LABELS = {
+  pace: 'ความเร็ว (Pace)', shooting: 'การยิง (Shooting)',
+  passing: 'การจ่ายบอล (Passing)', defending: 'เกมรับ (Defending)'
+};
+
+// สโมสรไทยลีกทั้งหมด (16 ทีม)
+let leagueTeams = [
+  { name: 'บุรีรัมย์ ยูไนเต็ด', code: 'BRR', rating: 76, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'บีจี ปทุม ยูไนเต็ด', code: 'BGP', rating: 75, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'ทรู แบงค็อก ยูไนเต็ด', code: 'BU', rating: 75, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'การท่าเรือ เอฟซี', code: 'POR', rating: 73, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'เมืองทอง ยูไนเต็ด', code: 'MTU', rating: 72, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'ชลบุรี เอฟซี', code: 'CBR', rating: 70, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'เชียงราย ยูไนเต็ด', code: 'CRU', rating: 69, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'ราชบุรี เอฟซี', code: 'RBC', rating: 68, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'นครราชสีมา เอฟซี', code: 'SWAT', rating: 67, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'อุทัยธานี เอฟซี', code: 'UTD', rating: 66, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'ขอนแก่น ยูไนเต็ด', code: 'KKU', rating: 65, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'สุโขทัย เอฟซี', code: 'SKT', rating: 65, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'ลำพูน วอร์ริเออร์', code: 'LPW', rating: 64, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'ประจวบ เอฟซี', code: 'PJC', rating: 64, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'ตราด เอฟซี', code: 'TRT', rating: 63, p:0, w:0, d:0, l:0, pts:0 },
+  { name: 'ระยอง เอฟซี', code: 'RYN', rating: 62, p:0, w:0, d:0, l:0, pts:0 }
+];
+
+let agentHired = false;
+let agentOfferPending = null;
+let agentOfferWage = 0;
+let cupAlive = true;
+const ROLE_WAGE = {"สำรองอคาเดมี่":2000,"ตัวจริงเยาวชน":4000,"ดาวรุ่งชุดใหญ่":30000,"ตัวจริง":80000,"กัปตันทีม":150000};
+const POS_STATS = {ST:['shooting','pace','passing'],LW:['pace','shooting','passing'],RW:['pace','shooting','passing'],CAM:['passing','shooting','pace'],CM:['passing','defending','pace'],CB:['defending','defending','pace']};
+function ovrOf(){ return Math.round((P.attrs.pace+P.attrs.shooting+P.attrs.passing+P.attrs.defending)/4); }
+function clubRating(){ const t=leagueTeams.find(x=>x.name===P.club); return t?t.rating:65; }
+
+const LIFESTYLE_STORE = [
+  { id: 'item1', name: '🧦 ถุงเท้าและสนับแข้งชุดใหม่', price: 1200 },
+  { id: 'item2', name: '🎧 หูฟังไร้สาย', price: 3500 },
+  { id: 'item3', name: '👟 สตั๊ดรุ่นท็อป', price: 7500 },
+  { id: 'item4', name: '🎮 เครื่องเกมคอนโซล', price: 18000 },
+  { id: 'item5', name: '📱 สมาร์ทโฟนรุ่นท็อป', price: 45000 },
+  { id: 'item6', name: '💻 แล็ปท็อปเกมมิ่ง', price: 60000 },
+  { id: 'item7', name: '🛵 มอเตอร์ไซค์คันเท่', price: 95000 },
+  { id: 'item8', name: '👔 ชุดสูทและเสื้อผ้าแบรนด์เนม', price: 150000 },
+  { id: 'item9', name: '⌚ นาฬิกาหรูสวิส', price: 350000 },
+  { id: 'item10', name: '🛻 รถกระบะสุดเท่', price: 900000 },
+  { id: 'item11', name: '🚗 รถยนต์ซีดานคันแรก', price: 1200000 },
+  { id: 'item12', name: '🚘 รถสปอร์ตคูเป้', price: 2500000 },
+  { id: 'item13', name: '🏘️ ทาวน์เฮาส์', price: 3500000 },
+  { id: 'item14', name: '🏢 คอนโดมิเนียมหรูใจกลางเมือง', price: 5000000 },
+  { id: 'item15', name: '🚤 เรือสปีดโบ๊ต', price: 8000000 },
+  { id: 'item16', name: '🏎️ ซูเปอร์คาร์อิตาลี', price: 12000000 },
+  { id: 'item17', name: '🏡 บ้านเดี่ยวพูลวิลล่า', price: 18000000 },
+  { id: 'item18', name: '🏖️ วิลล่าริมทะเลภูเก็ต', price: 30000000 },
+  { id: 'item19', name: '🏰 คฤหาสน์ส่วนตัว', price: 45000000 },
+  { id: 'item20', name: '🚁 เฮลิคอปเตอร์ส่วนตัว', price: 70000000 },
+  { id: 'item21', name: '🛥️ เรือยอร์ชส่วนตัว', price: 90000000 },
+  { id: 'item22', name: '🛩️ เครื่องบินเจ็ทส่วนตัว', price: 120000000 },
+  { id: 'item23', name: '🏝️ เกาะส่วนตัว', price: 250000000 },
+  { id: 'item24', name: '🏟️ ซื้อสโมสรฟุตบอลเป็นของตัวเอง', price: 500000000 }
+];
+let ownedItems = [];
+let trophiesWon = []; 
+
+function isFirstTeam() {
+  return P && (P.role === "ดาวรุ่งชุดใหญ่" || P.role === "ตัวจริง" || P.role === "กัปตันทีม");
+}
+
+function isTransferWindowOpen() {
+  return (currentWeek >= 1 && currentWeek <= 6) || (currentWeek >= 15 && currentWeek <= 18);
+}
+
+/* ================= CREATOR SYSTEM ================= */
+function renderAdjusters() {
+  document.getElementById('statAdjusters').innerHTML = Object.keys(tempStats).map(key => `
+    <div class="stat-adjuster">
+      <span style="font-size:13px;">${STAT_LABELS[key]}</span>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button class="btn-step" onclick="adjustStat('${key}', -1)">-</button>
+        <span style="font-weight:600; width:24px; text-align:center;">${tempStats[key]}</span>
+        <button class="btn-step" onclick="adjustStat('${key}', 1)">+</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function adjustStat(key, amount) {
+  if (amount > 0 && remainingInitPoints > 0 && tempStats[key] < 99) { tempStats[key]++; remainingInitPoints--; }
+  else if (amount < 0 && tempStats[key] > 50) { tempStats[key]--; remainingInitPoints++; }
+  updatePreview();
+}
+
+function updatePreview() {
+  const name = document.getElementById('inName').value.trim() || 'สมชาย ใจเด็ด';
+  document.getElementById('prevName').textContent = name;
+  document.getElementById('prevPos').textContent = document.getElementById('inPos').value;
+  document.getElementById('prevAge').textContent = `อายุ: ${document.getElementById('inAge').value} ปี`;
+
+  document.getElementById('pvPace').textContent = tempStats.pace;
+  document.getElementById('pvShooting').textContent = tempStats.shooting;
+  document.getElementById('pvPassing').textContent = tempStats.passing;
+  document.getElementById('pvDefending').textContent = tempStats.defending;
+
+  let ovr = Math.round((tempStats.pace + tempStats.shooting + tempStats.passing + tempStats.defending) / 4);
+  document.getElementById('prevOvr').textContent = ovr;
+
+  document.getElementById('initPoints').textContent = remainingInitPoints;
+  const btn = document.getElementById('btnStartCareer');
+  if (remainingInitPoints === 0) {
+    btn.disabled = false; btn.innerHTML = "🚀 สุ่มสโมสรอคาเดมี่ & เริ่มอาชีพ";
+  } else {
+    btn.disabled = true; btn.innerHTML = `🔒 กรุณาใช้อัปแต้มทักษะให้หมด (เหลือ ${remainingInitPoints} แต้ม)`;
+  }
+  renderAdjusters();
+}
+
+function initCareer() {
+  if (remainingInitPoints > 0) return;
+
+  let startTeam = leagueTeams[Math.floor(Math.random() * leagueTeams.length)];
+
+  P = {
+    name: document.getElementById('inName').value.trim() || 'สมชาย ใจเด็ด',
+    pos: document.getElementById('inPos').value,
+    age: parseInt(document.getElementById('inAge').value),
+    club: startTeam.name,
+    role: "สำรองอคาเดมี่",
+    fitness: 100, coachTrust: 15, injuredWeeks: 0, potential: 70 + Math.floor(Math.random()*23),
+    wage: 2000, marketValue: 150000, bankBalance: 0,
+    attrs: { ...tempStats },
+    stats: { apps: 0, goals: 0, assists: 0 },
+    season: { apps: 0, goals: 0, assists: 0 }
+  };
+
+  document.getElementById('creatorScreen').classList.add('hidden');
+  document.getElementById('gameDashboard').classList.remove('hidden');
+
+  updateDashboardUI();
+  prepareNextMatch();
+  renderLeagueTable();
+  renderLifestyleStore();
+  renderTrophies();
+}
+
+renderAdjusters(); updatePreview();
+
+/* ================= DASHBOARD & LOGIC ================= */
+function updateDashboardUI() {
+  let ovr = Math.round((P.attrs.pace + P.attrs.shooting + P.attrs.passing + P.attrs.defending) / 4);
+  
+  P.marketValue = isFirstTeam() 
+    ? Math.round(ovr * 25000 + (P.stats.goals * 40000))
+    : Math.round(ovr * 3000 + (P.stats.goals * 5000));
+
+  document.getElementById('hudName').textContent = P.name;
+  document.getElementById('hudSub').textContent = `${P.pos} · ${P.club} ${isFirstTeam() ? '' : '(U18)'}`;
+  document.getElementById('hudOvr').textContent = ovr;
+  document.getElementById('hudAge').textContent = `${P.age} ปี`;
+  document.getElementById('hudFitness').textContent = `${P.fitness}%`;
+  document.getElementById('hudWeek').textContent = `ปี ${currentSeason} (${currentWeek}/30)`;
+  document.getElementById('hudRole').textContent = P.role;
+
+  document.getElementById('stApps').textContent = P.season.apps;
+  document.getElementById('stGoals').textContent = P.season.goals;
+  document.getElementById('stAssists').textContent = P.season.assists;
+  document.getElementById('coachTrustText').textContent = `${P.coachTrust} / 100`;
+
+  document.getElementById('infoVal').textContent = `฿${P.marketValue.toLocaleString()}`;
+  document.getElementById('infoWage').textContent = `฿${P.wage.toLocaleString()}`;
+  document.getElementById('infoBank').textContent = `฿${P.bankBalance.toLocaleString()}`;
+
+  const windowBadge = document.getElementById('transferWindowBadge');
+  if (isTransferWindowOpen()) {
+    let windowName = currentWeek <= 6 ? "ตลาดรอบแรก (Summer Window)" : "ตลาดรอบสอง (Winter Window)";
+    windowBadge.className = "transfer-status-badge transfer-open";
+    windowBadge.textContent = `🟢 ${windowName} กำลังเปิดทำการ!`;
+  } else {
+    windowBadge.className = "transfer-status-badge transfer-closed";
+    windowBadge.textContent = `🔒 ตลาดซื้อขายปิดอยู่ (เปิดสัปดาห์ 1-6 และ 15-18)`;
+  }
+
+  if (P.age >= 34) {
+    document.getElementById('btnRetire').classList.remove('hidden');
+  }
+
+  if (P.fitness <= 0) {
+    document.getElementById('emergencyRestCard').classList.remove('hidden');
+  } else {
+    document.getElementById('emergencyRestCard').classList.add('hidden');
+  }
+
+  document.getElementById('btnDoTrain').disabled = hasTrainedThisWeek || hasRestedThisWeek;
+  document.getElementById('btnDoRest').disabled = hasTrainedThisWeek || hasRestedThisWeek;
+
+  document.getElementById('attributesListGrid').innerHTML = Object.keys(P.attrs).map(k => `
+    <div style="background:#070a12; padding:10px 12px; border-radius:6px; border:1px solid var(--bg-card-border); display:flex; justify-content:space-between; align-items:center;">
+      <span style="font-size:12px; color:var(--text-muted);">${STAT_LABELS[k]}</span>
+      <span style="font-family:var(--font-title); font-size:16px; color:var(--accent-gold); font-weight:600;">${P.attrs[k]}</span>
+    </div>
+  `).join('');
+
+  document.getElementById('tableTitleText').textContent = isFirstTeam() 
+    ? "📊 ตารางคะแนน ไทยลีก 1 (16 ทีม)" 
+    : "📊 ตารางคะแนน ไทย Youth League (U18)";
+}
+
+function doWeeklyTraining() {
+  if (hasTrainedThisWeek || hasRestedThisWeek) { alert('คุณทำการซ้อมหรือพักผ่อนสัปดาห์นี้ไปแล้ว!'); return; }
+  if (P.injuredWeeks > 0) { alert('🩹 กำลังบาดเจ็บ ซ้อมไม่ได้ กรุณาเลือกพักผ่อน'); return; }
+  if (P.fitness < 20) { alert('⚠️ ความฟิตไม่พอซ้อม! กรุณาเลือกพักผ่อน'); return; }
+  P.fitness = Math.max(0, P.fitness - 20);
+  hasTrainedThisWeek = true;
+  P.coachTrust = Math.min(100, P.coachTrust + 1);
+  const chance = P.age <= 21 ? 1 : P.age <= 28 ? 0.7 : P.age <= 32 ? 0.4 : 0.2;
+  let msg = '💪 ซ้อมเสร็จสิ้น แต่ครั้งนี้ยังไม่เห็นพัฒนาการ (ความฟิต -20%)';
+  if (Math.random() < chance) {
+    const pool = Math.random() < 0.7 ? POS_STATS[P.pos] : Object.keys(P.attrs);
+    const k = pool[Math.floor(Math.random() * pool.length)];
+    if (P.attrs[k] < P.potential) { P.attrs[k]++; msg = `💪 ซ้อมเสร็จสิ้น! ${STAT_LABELS[k]} +1 (ความฟิต -20%)`; }
+    else msg = `💪 ${STAT_LABELS[k]} ถึงขีดจำกัดศักยภาพของคุณแล้ว (ความฟิต -20%)`;
+  }
+  alert(msg);
+  updateDashboardUI();
+  checkMatchReady();
+}
+
+function restPlayer() {
+  if (hasTrainedThisWeek || hasRestedThisWeek) { alert('คุณทำกิจกรรมสัปดาห์นี้ไปแล้ว!'); return; }
+
+  P.fitness = Math.min(100, P.fitness + 30);
+  hasRestedThisWeek = true;
+  alert('🛌 พักผ่อนเรียบร้อย ความฟิต +30% (สัปดาห์นี้ถือว่าไม่ได้ซ้อม)');
+  updateDashboardUI();
+  checkMatchReady();
+}
+
+function emergencyRest() {
+  P.fitness = 40;
+  alert('🛌 ฟื้นฟูร่างกายฉุกเฉินสำเร็จ ความฟิตเพิ่มเป็น 40%');
+  updateDashboardUI();
+}
+
+/* ================= AGENT SYSTEM ================= */
+function hireAgent(name, isFree) {
+  agentHired = true;
+  document.getElementById('agentHireSection').classList.add('hidden');
+  document.getElementById('agentActiveSection').classList.remove('hidden');
+  document.getElementById('agentActiveName').textContent = name;
+  document.getElementById('navAgent').classList.remove('hidden');
+
+  addAgentMessage(`🤝 สวัสดีครับ! ผมจะดูแลเรื่องข้อเสนอย้ายทีมและผลประโยชน์ของคุณเองครับ!`);
+}
+
+function addAgentMessage(msg) {
+  const box = document.getElementById('agentChatBox');
+  if (!box) return;
+  const div = document.createElement('div');
+  div.className = 'chat-msg agent';
+  div.innerHTML = `<b>เอเย่นต์:</b> ${msg}`;
+  box.prepend(div);
+  document.getElementById('agentNotify').classList.remove('hidden');
+}
+
+function triggerAgentTransferOffer() {
+  if (!agentHired || !isTransferWindowOpen()) return;
+  let clubs = leagueTeams.filter(c => c.name !== P.club && c.rating <= ovrOf() + 15);
+  if (clubs.length === 0) return;
+  let target = clubs[Math.floor(Math.random() * clubs.length)];
+  agentOfferPending = target;
+  let newWage = isFirstTeam() ? Math.min(400000, Math.round(P.wage * 1.2)) : ROLE_WAGE["ดาวรุ่งชุดใหญ่"];
+  agentOfferWage = newWage;
+  addAgentMessage(`🔥 ข้อเสนอใหม่! สโมสร <b>${target.name}</b> สนใจดึงตัวคุณไปร่วมทีม!`);
+  document.getElementById('transferOfferDesc').innerHTML = `สโมสร <b>${target.name}</b> เสนอค่าเหนื่อย ฿${newWage.toLocaleString()}/สัปดาห์ (ต้องเริ่มแย่งตำแหน่งใหม่ที่ทีมนี้)`;
+  document.getElementById('transferOfferBox').classList.remove('hidden');
+}
+
+function acceptTransfer() {
+  if (!agentOfferPending) return;
+  if (!isTransferWindowOpen()) {
+    alert('❌ ตลาดซื้อขายปิดแล้ว!');
+    document.getElementById('transferOfferBox').classList.add('hidden');
+    agentOfferPending = null;
+    return;
+  }
+  const wasFirst = isFirstTeam();
+  P.club = agentOfferPending.name;
+  P.wage = agentOfferWage;
+  if (!wasFirst) { P.role = "ดาวรุ่งชุดใหญ่"; P.coachTrust = 40; }
+  else {
+    P.coachTrust = Math.min(P.coachTrust, 55);
+    if (P.role === "กัปตันทีม") P.role = "ตัวจริง"; else if (P.role === "ตัวจริง") P.role = "ดาวรุ่งชุดใหญ่";
+  }
+  alert(`🎉 ย้ายไปร่วมทีม ${P.club} เรียบร้อย! ต้องสร้างความไว้ใจจากโค้ชใหม่ (สถานะ: ${P.role})`);
+  document.getElementById('transferOfferBox').classList.add('hidden');
+  addAgentMessage(`ยินดีด้วยกับการย้ายทีมไป ${P.club}! ทำผลงานให้เต็มที่นะ!`);
+  agentOfferPending = null;
+  updateDashboardUI();
+  prepareNextMatch();
+}
+
+function rejectTransfer() {
+  addAgentMessage(`รับทราบครับ ผมปฏิเสธข้อเสนอจาก ${agentOfferPending.name} ให้เรียบร้อยแล้ว`);
+  document.getElementById('transferOfferBox').classList.add('hidden');
+  agentOfferPending = null;
+}
+
+/* ================= LIFESTYLE & TROPHIES ================= */
+function renderLifestyleStore() {
+  const box = document.getElementById('lifestyleStoreGrid');
+  box.innerHTML = LIFESTYLE_STORE.map(item => {
+    let isOwned = ownedItems.includes(item.id);
+    return `
+      <div class="store-item ${isOwned ? 'owned' : ''}">
+        <div style="font-weight:600; color:#fff; font-size:13px; margin-bottom:6px;">${item.name}</div>
+        <div style="font-size:13px; color:var(--accent-gold); margin-bottom:10px;">฿${item.price.toLocaleString()}</div>
+        ${isOwned 
+          ? `<span style="font-size:12px; color:var(--accent-green); font-weight:600;">✓ ครอบครองแล้ว</span>`
+          : `<button class="btn-gold" style="padding:6px 10px; font-size:12px;" onclick="buyLifestyle('${item.id}', ${item.price})">ซื้อ</button>`
+        }
+      </div>
+    `;
+  }).join('');
+}
+
+function buyLifestyle(id, price) {
+  if (P.bankBalance < price) { alert('❌ เงินสะสมในบัญชีของคุณไม่พอ!'); return; }
+  P.bankBalance -= price;
+  ownedItems.push(id);
+  alert('🎉 สั่งซื้อสำเร็จแล้ว!');
+  updateDashboardUI();
+  renderLifestyleStore();
+}
+
+function renderTrophies() {
+  const box = document.getElementById('trophyContainer');
+  if (trophiesWon.length === 0) {
+    box.innerHTML = `<div class="trophy-container-empty">ยังไม่มีถ้วยรางวัลในตู้โชว์</div>`;
+  } else {
+    box.innerHTML = `
+      <div class="trophy-grid">
+        ${trophiesWon.map(t => `
+          <div class="trophy-card">
+            <div style="font-size:32px; margin-bottom:8px;">🏆</div>
+            <div style="font-size:15px; font-weight:600; color:#fff;">${t.name}</div>
+            <div style="font-size:13px; color:var(--accent-gold); margin-top:4px;">ปี ${t.year}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+}
+
+/* ================= MATCH ENGINE & PRE-MATCH ================= */
+function prepareNextMatch() {
+  isCupMatch = false;
+
+  if (currentWeek % 6 === 0 && currentWeek <= 24 && cupAlive) {
+    isCupMatch = true;
+    cupRoundText = currentWeek === 24 ? "รอบชิงชนะเลิศ (Final)" : currentWeek === 18 ? "รอบรองชนะเลิศ" : currentWeek === 12 ? "รอบก่อนรองชนะเลิศ" : "รอบแรก";
+  }
+
+  let opponentsPool = leagueTeams.filter(t => t.name !== P.club);
+  let oppIndex = (currentWeek - 1) % opponentsPool.length;
+  currentOpponent = opponentsPool[oppIndex] || opponentsPool[0];
+
+  let leagueName = isFirstTeam() ? "ฟุตบอลไทยลีก 1" : "ไทย Youth League (U18)";
+  let teamSuffix = isFirstTeam() ? "" : " U18";
+
+  document.getElementById('matchVsTitle').textContent = `สัปดาห์นี้พบกับ ${currentOpponent.name}${teamSuffix}`;
+  document.getElementById('matchCupTypeText').textContent = isCupMatch 
+    ? `รายการ: ${isFirstTeam() ? 'ช้าง เอฟเอ คัพ' : 'เยาวชน เอฟเอ คัพ'} (${cupRoundText})` 
+    : `รายการ: ${leagueName}`;
+  
+  document.getElementById('homeName').textContent = P.club.slice(0, 8);
+  document.getElementById('homeBadge').textContent = "MY";
+  document.getElementById('awayName').textContent = currentOpponent.name.slice(0, 8);
+  document.getElementById('awayBadge').textContent = currentOpponent.code || "OPP";
+
+  checkMatchReady();
+}
+
+function checkMatchReady() {
+  const btn = document.getElementById('btnStartLiveMatch');
+  const notice = document.getElementById('matchNoticeMsg');
+
+  if (hasTrainedThisWeek || hasRestedThisWeek) {
+    btn.disabled = false;
+    notice.style.display = "none";
+  } else {
+    btn.disabled = true;
+    notice.style.display = "block";
+  }
+}
+
+function startLiveMatch() {
+  if (!hasTrainedThisWeek && !hasRestedThisWeek) return;
+
+  document.getElementById('matchPreNotice').classList.add('hidden');
+  document.getElementById('liveStreamArea').classList.remove('hidden');
+  document.getElementById('ratingSummaryBox').classList.add('hidden');
+  document.getElementById('liveStatusText').textContent = "กำลังแข่งขัน LIVE";
+
+  currentMinute = 0;
+  homeScore = 0;
+  awayScore = 0;
+  matchGoals = 0;
+  matchAssists = 0;
+  matchRating = 6.0;
+  matchMinutesPlayed = 0;
+  isPlayerWarmingUp = false;
+
+  document.getElementById('scoreText').textContent = "0 - 0";
+  document.getElementById('minuteText').textContent = "0'";
+  document.getElementById('matchProgressBar').style.width = "0%";
+
+  if (!(P.injuredWeeks > 0) && (P.role === "ตัวจริง" || P.role === "กัปตันทีม" || P.role === "ตัวจริงเยาวชน")) {
+    isPlayerOnField = true;
+  } else {
+    isPlayerOnField = false;
+  }
+
+  document.getElementById('matchLogBox').innerHTML = '';
+  addMatchLog(`0'`, `🏁 กรรมการเป่านกหวีดเริ่มการแข่งขัน!`, 'highlight');
+
+  if (isPlayerOnField) {
+    addMatchLog(`0'`, `⚽ คุณลงสนามเป็น 11 ตัวจริงให้ ${P.club}!`, 'sub');
+    P.stats.apps++; P.season.apps++;
+  } else {
+    addMatchLog(`0'`, `🪑 คุณมีชื่อเป็นตัวสำรอง นั่งรอโอกาสข้างสนาม`, 'log');
+  }
+
+  // ปรับความเร็วลูปให้กระชับลงพอดีๆ (500ms / นาที)
+  matchTimer = setInterval(runMatchLoop, 500);
+}
+
+function runMatchLoop() {
+  currentMinute += 1;
+  document.getElementById('minuteText').textContent = `${currentMinute}'`;
+  document.getElementById('matchProgressBar').style.width = `${(currentMinute / 90) * 100}%`;
+
+  if (isPlayerOnField) matchMinutesPlayed++;
+
+  if (!isPlayerOnField && !isPlayerWarmingUp && !(P.injuredWeeks > 0) && currentMinute >= 50 && Math.random() < 0.15) {
+    isPlayerWarmingUp = true;
+    addMatchLog(`${currentMinute}'`, `🔥 โค้ชสั่งให้คุณลุกไปวอร์มร่างกายข้างสนาม!`, 'sub');
+  }
+
+  if (!isPlayerOnField && isPlayerWarmingUp && currentMinute >= 65 && Math.random() < 0.1) {
+    isPlayerOnField = true;
+    P.stats.apps++; P.season.apps++;
+    addMatchLog(`${currentMinute}'`, `🔄 เปลี่ยนตัวลงสนาม! โค้ชส่งคุณลงทำเกมในครึ่งหลัง`, 'sub');
+  }
+
+  simulateMinuteEvent(currentMinute);
+
+  if (currentMinute >= 90) {
+    clearInterval(matchTimer);
+    document.getElementById('liveStatusText').textContent = "จบการแข่งขัน FT";
+    addMatchLog(`90'`, `🔔 กรรมการเป่านกหวีดหมดเวลาการแข่งขัน!`, 'highlight');
+    showMatchSummary();
+  }
+}
+
+function simulateMinuteEvent(min) {
+  if (isPlayerOnField && Math.random() < 0.03) { clearInterval(matchTimer); triggerPlayerDecision(min); return; }
+  let opp = currentOpponent ? currentOpponent.rating : 70;
+  let diff = (clubRating() + (ovrOf() - 60) * 0.1) - opp;
+  let hp = Math.max(0.006, Math.min(0.03, 0.0135 + diff * 0.0004));
+  let ap = Math.max(0.006, Math.min(0.03, 0.0135 - diff * 0.0004));
+  if (Math.random() < hp) {
+    homeScore++;
+    document.getElementById('scoreText').textContent = `${homeScore} - ${awayScore}`;
+    addMatchLog(`${min}'`, `⚽ GOAL! ${P.club} ยิงประตูได้!`, 'highlight');
+  } else if (Math.random() < ap) {
+    awayScore++;
+    document.getElementById('scoreText').textContent = `${homeScore} - ${awayScore}`;
+    addMatchLog(`${min}'`, `🚨 GOAL! ${currentOpponent.name} ได้ประตู`, 'alert');
+  }
+}
+
+const C = (t, r, st, ok, f) => ({ t, r, st, ok, f: f || 'LOSE' });
+const SC = (id, title, desc, ch) => ({ id, title, desc, ch });
+const SCEN = {
+  atk: [
+    SC('a1','หลุดเข้าเขตโทษ!','ผู้รักษาประตูออกมาปิดมุม เพื่อนวิ่งตามมาข้างหลัง!',[C('จ่ายกลับให้เพื่อนที่ว่างอยู่','S','pa','PLAY'),C('เล็งซ้ายเข้ามุมไกล','N','sh','GOAL'),C('ลากหลบผู้รักษาประตูแล้วเข้าไปยิง','R','pc','GOAL')]),
+    SC('a2','ลูกเปิดเข้ากลางกรอบเขตโทษ!','บอลลอยมาตรงหน้าคุณพอดี!',[C('ทดบอลกลับให้เพื่อนเล่นต่อ','S','pa','PLAY'),C('โหม่งเข้ากรอบประตู','N','sh','GOAL'),C('วอลเลย์ทันทีไม่ต้องรับบอล','R','sh','GOAL')]),
+    SC('a3','สวนกลับ 2 ต่อ 1!','เหลือกองหลังคนเดียว เพื่อนวิ่งขนานมา!',[C('ถือบอลรอเพื่อนขึ้นมาให้ครบ','S','pa','PLAY'),C('สอดทะลุให้เพื่อนจบ','N','pa','ASSIST'),C('ยิงเองจากนอกเขตโทษ','R','sh','GOAL')]),
+    SC('a4','ได้ฟรีคิกหน้าเขตโทษ!','ทีมมอบหมายให้คุณเป็นคนเตะ!',[C('จ่ายสั้นให้เพื่อนเล่นต่อ','S','pa','PLAY'),C('เปิดโค้งให้เพื่อนโหม่ง','N','pa','ASSIST'),C('ยิงตรงเข้าประตูเลย','R','sh','GOAL')]),
+    SC('a5','แนวรับคู่แข่งตั้งไม่ทัน!','คุณได้บอลในพื้นที่ว่างหน้ากรอบเขตโทษ!',[C('ชะลอเกม รอเพื่อนขึ้นมาสนับสนุน','S','pa','PLAY'),C('ตัดเข้าในแล้วยิงเสาสอง','N','sh','GOAL'),C('ชิปข้ามผู้รักษาประตู','R','sh','GOAL')]),
+    SC('a6','ถูกประกบสองคนริมเส้น!','ต้องรีบตัดสินใจก่อนโดนแย่ง!',[C('ถอยหลังจ่ายกลับ','S','pa','PLAY'),C('แทงบอลผ่านช่องให้เพื่อน','N','pa','ASSIST'),C('ลากผ่านสองคนแล้วยิง','R','pc','GOAL')])
+  ],
+  mid: [
+    SC('m1','กลางสนามถูกกดดันหนัก!','คู่แข่งสามคนบีบเข้ามา!',[C('ส่งกลับให้ตัวรับ','S','pa','PLAY'),C('เปลี่ยนเกมไปอีกฝั่ง','N','pa','PLAY'),C('ส่งทะลุแนวรับสุดตัว','R','pa','ASSIST')]),
+    SC('m2','บอลหลุดมาที่ขอบเขตโทษ!','บอลเด้งมาถึงเท้าคุณ มีช่องให้ยิง!',[C('แตะให้เพื่อนเล่นต่อง่าย ๆ','S','pa','PLAY'),C('ยิงทันทีจากขอบเขตโทษ','N','sh','GOAL'),C('ยิงด้วยท่าเก๋ ๆ ไม่ธรรมดา','R','sh','GOAL')]),
+    SC('m3','แย่งบอลกลางสนาม!','คู่แข่งกำลังจะเปิดเกมสวนกลับ!',[C('บล็อกช่องส่ง ตั้งรับก่อน','S','df','PLAY'),C('เข้าแย่งบอลตรง ๆ','N','df','PLAY'),C('ตัดบอลแล้วสวนกลับทันที','R','pc','ASSIST','CONCEDE')]),
+    SC('m4','ได้เตะลูกเตะมุม!','เพื่อนยืนรอในกรอบเขตโทษเต็มไปหมด!',[C('เปิดสั้นให้เพื่อนเล่นต่อ','S','pa','PLAY'),C('โค้งเข้าหน้าประตู','N','pa','ASSIST'),C('ยิงตรงจากมุมเลย','R','sh','GOAL')]),
+    SC('m5','เกมเริ่มช้าลง','คุณคุมจังหวะกลางสนามอยู่',[C('คุมจังหวะ เล่นบอลสั้น','S','pa','PLAY'),C('ส่งยาวข้ามแนวรับ','N','pa','ASSIST'),C('ลากเลี้ยงผ่านสองคนกลางสนาม','R','pc','PLAY','CONCEDE')])
+  ],
+  def: [
+    SC('d1','กองหน้าคู่แข่งหลุดเดี่ยว!','เหลือแค่คุณกับกองหน้าเขา!',[C('ถ่วงเวลา รอเพื่อนมาช่วย','S','df','PLAY'),C('เข้าสกัดบอลตรง ๆ','N','df','PLAY','CONCEDE'),C('เสียบสกัดเต็มตัว','R','df','PLAY','CONCEDE')]),
+    SC('d2','ครอสเข้าหน้าประตูเรา!','บอลลอยมาตรงหน้าคุณ!',[C('เคลียร์ออกข้างสนาม','S','df','PLAY'),C('โหม่งตัดบอลออก','N','df','PLAY'),C('โหม่งเปิดสวนให้กองหน้าเรา','R','pa','ASSIST','CONCEDE')]),
+    SC('d3','บอลสองจังหวะหน้าแนวรับ!','มีคู่แข่งวิ่งเข้ามาประชิด!',[C('ซัดไกลออกจากอันตราย','S','df','PLAY'),C('ตั้งหลักแล้วจ่ายสั้น','N','pa','PLAY'),C('ลากบอลออกจากแนวรับ','R','pc','PLAY','CONCEDE')]),
+    SC('d4','ลูกเตะมุมของทีมเรา!','คุณยืนอยู่หลังแนวอยู่ ขึ้นไปได้ไหม?',[C('อยู่ตั้งหลัก กันสวนกลับ','S','df','PLAY'),C('ขึ้นไปป่วนในเขตโทษ','N','df','PLAY'),C('ขึ้นไปโหม่งเต็มตัว','R','sh','GOAL','CONCEDE')]),
+    SC('d5','คู่แข่งสวนกลับ 3 ต่อ 2!','เหลือแนวรับแค่สองคน!',[C('ถอยลงต่ำปิดช่องส่ง','S','df','PLAY'),C('บล็อกเส้นทางจ่ายเข้ากลาง','N','df','PLAY'),C('พุ่งเข้าแย่งจากคนครองบอล','R','df','PLAY','CONCEDE')])
+  ]
+};
+let curChoices = [];
+const usedScen = [];
+const RISK_TAG = { S: '🛡️ เอาชัวร์', N: '⚖️ สมดุล', R: '🔥 เสี่ย' };
+function pickScenario() {
+  let pool;
+  if (['ST','LW','RW'].includes(P.pos)) pool = SCEN.atk;
+  else if (P.pos === 'CAM') pool = Math.random() < 0.5 ? SCEN.atk : SCEN.mid;
+  else if (P.pos === 'CM') pool = Math.random() < 0.5 ? SCEN.mid : SCEN.def;
+  else pool = SCEN.def;
+  let fresh = pool.filter(x => !usedScen.includes(x.id));
+  if (!fresh.length) { pool.forEach(x => { const i = usedScen.indexOf(x.id); if (i >= 0) usedScen.splice(i, 1); }); fresh = pool; }
+  const sc = fresh[Math.floor(Math.random() * fresh.length)];
+  usedScen.push(sc.id);
+  return sc;
+}
+function triggerPlayerDecision(min) {
+  const sc = pickScenario();
+  curChoices = sc.ch;
+  document.getElementById('decisionBox').classList.remove('hidden');
+  document.getElementById('decTitle').textContent = `⚡ (${min}') ${sc.title}`;
+  document.getElementById('decDesc').textContent = sc.desc;
+  document.getElementById('decChoices').innerHTML = sc.ch.map((c, i) =>
+    `<div class="choice-btn" onclick="makeChoice(${i})"><b>${RISK_TAG[c.r]}</b> · ${c.t}</div>`).join('');
+}
+
+function makeChoice(i) {
+  const c = curChoices[i];
+  const box = document.getElementById('decisionBox');
+  const card = document.getElementById('matchLiveCard');
+  box.classList.add('hidden');
+  const STAT = { sh: 'shooting', pa: 'passing', pc: 'pace', df: 'defending' };
+  let opp = currentOpponent ? currentOpponent.rating : 70;
+  let p = 0.35 + (P.attrs[STAT[c.st]] - opp) * 0.01 + (c.r === 'S' ? 0.25 : c.r === 'R' ? -0.15 : 0);
+  if (P.fitness < 30) p -= 0.15;
+  p = Math.max(0.08, Math.min(0.92, p));
+  const t = `${currentMinute}'`;
+  const score = () => document.getElementById('scoreText').textContent = `${homeScore} - ${awayScore}`;
+  if (Math.random() < p) {
+    card.classList.add('flash-gold'); setTimeout(() => card.classList.remove('flash-gold'), 800);
+    if (c.ok === 'GOAL') {
+      homeScore++; matchGoals++; matchRating = Math.min(10, matchRating + 1.2); P.coachTrust = Math.min(100, P.coachTrust + 3); score();
+      addMatchLog(t, `🌟 SUCCESS! ${c.t} ... เข้าประตู! (+1 ประตู)`, 'highlight');
+    } else if (c.ok === 'ASSIST') {
+      homeScore++; matchAssists++; matchRating = Math.min(10, matchRating + 1.0); P.coachTrust = Math.min(100, P.coachTrust + 2); score();
+      addMatchLog(t, `🌟 SUCCESS! ${c.t} ... เพื่อนจบสกอร์! (+1 แอสซิสต์)`, 'highlight');
+    } else {
+      matchRating = Math.min(10, matchRating + (c.r === 'S' ? 0.3 : c.r === 'N' ? 0.6 : 0.9)); P.coachTrust = Math.min(100, P.coachTrust + 1);
+      addMatchLog(t, `✅ ${c.r === 'S' ? 'ปลอดภัย' : 'สำเร็จ'}! ${c.t}`, 'highlight');
+    }
+  } else {
+    card.classList.add('flash-red'); setTimeout(() => card.classList.remove('flash-red'), 800);
+    const sev = c.r === 'S' ? 1 : c.r === 'N' ? 2 : 3;
+    matchRating = Math.max(4, matchRating - (sev === 1 ? 0.3 : sev === 2 ? 0.5 : 0.8)); P.coachTrust = Math.max(0, P.coachTrust - sev);
+    addMatchLog(t, `❌ FAILED! ${c.t} ... พลาด`, 'alert');
+    if (c.f === 'CONCEDE' && Math.random() < 0.5) {
+      awayScore++; score();
+      addMatchLog(t, `🚨 GOAL! ${currentOpponent.name} ทำประตูจากความผิดพลาด`, 'alert');
+    }
+  }
+  matchTimer = setInterval(runMatchLoop, 500);
+}
+
+function addMatchLog(min, msg, type = 'log') {
+  const logBox = document.getElementById('matchLogBox');
+  const div = document.createElement('div');
+  div.className = `log-item ${type}`;
+  div.innerHTML = `<b>${min}</b> - ${msg}`;
+  logBox.prepend(div);
+}
+
+function showMatchSummary() {
+  P.stats.goals += matchGoals; P.stats.assists += matchAssists;
+  P.season.goals += matchGoals; P.season.assists += matchAssists;
+  document.getElementById('ratingSummaryBox').classList.remove('hidden');
+  if (matchMinutesPlayed > 0) {
+    document.getElementById('resRating').textContent = matchRating.toFixed(1);
+    document.getElementById('resSummaryText').textContent = `ลงสนาม ${matchMinutesPlayed} นาที | ยิง ${matchGoals} ประตู | ทำ ${matchAssists} แอสซิสต์`;
+  } else {
+    document.getElementById('resRating').textContent = "N/A";
+    document.getElementById('resSummaryText').textContent = `คุณไม่ได้ลงสนามในเกมนี้ (ได้พักผ่อนฟื้นฟูความฟิต +10%)`;
+    P.fitness = Math.min(100, P.fitness + 10);
+  }
+  if (isCupMatch) {
+    let win = homeScore > awayScore;
+    if (homeScore === awayScore) { win = Math.random() < 0.5; alert(`เสมอกัน ต้องดวลจุดโทษ... ${win ? 'ชนะ!' : 'แพ้'}`); }
+    if (win) {
+      if (cupRoundText.includes("Final")) {
+        let trophyTitle = isFirstTeam() ? "แชมป์ ช้าง เอฟเอ คัพ" : "แชมป์ เยาวชน เอฟเอ คัพ";
+        alert(`🏆 ยินดีด้วย! สโมสรของคุณคว้า ${trophyTitle}!`);
+        trophiesWon.push({ name: trophyTitle, year: currentSeason });
+      } else alert('🎉 ผ่านเข้ารอบฟุตบอลถ้วยต่อไป!');
+    } else { cupAlive = false; alert('❌ แพ้ในบอลถ้วย ตกรอบ'); }
+    renderTrophies();
+  }
+}
+
+function finishMatchDay() {
+  if (matchMinutesPlayed > 0) P.fitness = Math.max(0, P.fitness - 15);
+  P.bankBalance += agentHired ? Math.round(P.wage * 0.95) : P.wage;
+  if (P.injuredWeeks > 0) P.injuredWeeks--;
+  else if (matchMinutesPlayed > 0 && Math.random() < (P.fitness < 30 ? 0.12 : 0.03)) {
+    P.injuredWeeks = 1 + Math.floor(Math.random() * 4);
+    alert(`🩹 บาดเจ็บ! ต้องพักรักษาตัว ${P.injuredWeeks} สัปดาห์ (ซ้อมไม่ได้ และไม่ได้ลงสนาม)`);
+  }
+  const o = ovrOf(), t = P.coachTrust;
+  const promote = (role, msg) => { P.role = role; P.wage = ROLE_WAGE[role]; alert(msg); };
+  if (P.role === "สำรองอคาเดมี่" && t >= 30) promote("ตัวจริงเยาวชน", '🎉 เลื่อนขั้นเป็น "11 ตัวจริงทีมอคาเดมี่ U18"');
+  else if (P.role === "ตัวจริงเยาวชน" && t >= 70 && o >= 60 && P.age >= 17) promote("ดาวรุ่งชุดใหญ่", '🚀 โค้ชดันขึ้นทีมชุดใหญ่ไทยลีก 1! ได้สัญญาอาชีพฉบับแรก');
+  else if (P.role === "ดาวรุ่งชุดใหญ่" && t >= 85 && o >= 68) promote("ตัวจริง", '🎉 ยึดตำแหน่ง "11 ตัวจริงชุดใหญ่" ได้สำเร็จ');
+  else if (P.role === "ตัวจริง" && t >= 95 && o >= 75 && P.age >= 25) promote("กัปตันทีม", '🌟 ได้สวมปลอกแขนกัปตันทีมชุดใหญ่');
+  if (agentHired && isTransferWindowOpen() && !agentOfferPending && Math.random() < 0.2) triggerAgentTransferOffer();
+  simulateLeagueRound();
+  currentWeek++;
+  if (currentWeek > 30) advanceSeason();
+  hasTrainedThisWeek = false; hasRestedThisWeek = false;
+  document.getElementById('liveStreamArea').classList.add('hidden');
+  document.getElementById('matchPreNotice').classList.remove('hidden');
+  updateDashboardUI(); prepareNextMatch(); renderLeagueTable();
+}
+
+function advanceSeason() {
+  if (leagueTeams[0].name === P.club && P.season.apps >= 10) {
+    let tName = isFirstTeam() ? "แชมป์ ฟุตบอลไทยลีก 1" : "แชมป์ ไทย Youth League (U18)";
+    alert(`🏆 ยินดีด้วย! สโมสร ${P.club} คว้า ${tName} ประจำฤดูกาล!`);
+    trophiesWon.push({ name: tName, year: currentSeason });
+    renderTrophies();
+  }
+  currentSeason++; currentWeek = 1; P.age++;
+  leagueTeams.forEach(t => { t.p = t.w = t.d = t.l = t.pts = 0; });
+  cupAlive = true; P.season = { apps: 0, goals: 0, assists: 0 };
+  alert(`📅 จบฤดูกาล! เข้าสู่ปีที่ ${currentSeason} (อายุ ${P.age} ปี)`);
+  if (P.age >= 31) {
+    P.attrs.pace = Math.max(30, P.attrs.pace - 2);
+    ['shooting','passing','defending'].forEach(k => P.attrs[k] = Math.max(30, P.attrs[k] - (P.age >= 34 ? 2 : 1)));
+    alert('⚠️ สภาพร่างกายโรยราตามอายุ ค่าพลังลดลง');
+  }
+  if (!isFirstTeam() && P.age >= 19) {
+    const weak = [...leagueTeams].sort((a, b) => a.rating - b.rating).slice(0, 6);
+    P.club = weak[Math.floor(Math.random() * weak.length)].name;
+    P.role = "ดาวรุ่งชุดใหญ่"; P.wage = ROLE_WAGE[P.role]; P.coachTrust = 40;
+    alert(`📄 อายุเกินทีมเยาวชน! สัญญาอคาเดมี่สิ้นสุด คุณได้สัญญาอาชีพกับ ${P.club}`);
+  }
+  if (P.age >= 40) { alert('🛑 อายุครบ 40 ปี ปิดฉากอาชีพค้าแข้ง!'); retireCareer(); }
+}
+
+function retireCareer() {
+  alert(`🏁 ปิดฉากอาชีพค้าแข้งของ ${P.name}!\nสถิติรวม: ลงเล่น ${P.stats.apps} นัด | ทำ ${P.stats.goals} ประตู | ทำ ${P.stats.assists} แอสซิสต์`);
+  location.reload();
+}
+
+function simulateLeagueRound() {
+  if (isCupMatch) return;
+  const res = (a, b, ga, gb) => {
+    a.p++; b.p++;
+    if (ga > gb) { a.w++; a.pts += 3; b.l++; } else if (ga < gb) { b.w++; b.pts += 3; a.l++; } else { a.d++; b.d++; a.pts++; b.pts++; }
+  };
+  const goals = x => { let n = 0; for (let i = 0; i < 9; i++) if (Math.random() < 0.15 + x * 0.004) n++; return n; };
+  const me = leagueTeams.find(t => t.name === P.club), op = currentOpponent;
+  const rest = leagueTeams.filter(t => t !== me && t !== op).sort(() => Math.random() - 0.5);
+  if (me && op) res(me, op, homeScore, awayScore);
+  for (let i = 0; i + 1 < rest.length; i += 2) {
+    const d = rest[i].rating - rest[i + 1].rating;
+    res(rest[i], rest[i + 1], goals(d), goals(-d));
+  }
+  leagueTeams.sort((a, b) => b.pts - a.pts);
+}
+
+function renderLeagueTable() {
+  document.getElementById('leagueTableBody').innerHTML = leagueTeams.map((t, idx) => `
+    <tr class="${t.name === P?.club ? 'my-team' : ''}">
+      <td><b>${idx + 1}</b></td>
+      <td>${t.name} ${!isFirstTeam() ? 'U18' : ''} ${t.name === P?.club ? '⭐' : ''}</td>
+      <td>${t.p}</td><td>${t.w}</td><td>${t.d}</td><td>${t.l}</td>
+      <td><b>${t.pts}</b></td>
+    </tr>
+  `).join('');
+}
+
+function switchTab(tabId, el) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`tab-${tabId}`).classList.add('active');
+  if (el) el.classList.add('active');
+
+  if (tabId === 'agent') {
+    document.getElementById('agentNotify').classList.add('hidden');
+  }
+}
+</script>
+</body>
+</html>
